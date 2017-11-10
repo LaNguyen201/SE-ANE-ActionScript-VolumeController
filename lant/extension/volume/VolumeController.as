@@ -28,7 +28,7 @@ package lant.extension.volume
 		}
 		
 		
-		public function VolumeController()
+		public function VolumeController(singleton:SingletonEnforcer)
 		{
 			super();
 			
@@ -44,7 +44,7 @@ package lant.extension.volume
 		public static function get instance():VolumeController 
 		{
 			if ( !instace1) {
-				instace1 = new VolumeController( );
+				instace1 = new VolumeController(new SingletonEnforcer());
 				instace1.init();
 			}
 			
