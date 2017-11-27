@@ -1,6 +1,6 @@
 # SE-ANE-ActionScript-VolumeController
 The VolumeController là một class độc lập. Bạn có thể truy cập vào controller qua VolumeController.instance.
-Một khi bạn đã truy vào VolumeController.instance thì biến systemVolume sẽ kiểm tra âm lượng của hệ thống hiện tại.
+Một khi bạn đã truy vào VolumeController.instance thì biến systemVolume sẽ kiểm tra âm lượng của hệ thống hiện tại.<hr>
                   volumeSlider.value = VolumeController.instance.systemVolume;
 Biến systemVolume luôn cho biết giá trị âm lượng hiện tại của hệ thống, vì vậy bạn có thể kiểm tra bất cứ lúc nào.
 1.  VolumeEvent.VOLUME_CHANGED.
