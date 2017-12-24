@@ -1,14 +1,18 @@
-package lant.extension.volume
+package lant.extension.volume.events
 {
 	import flash.events.Event;
-	
+
 	public class VolumeEvent extends Event
 	{
+		//check when volume change
 		public static const VOLUME_CHANGED:String = "volumeChanged";
+		//system volum
 		public var volume:Number;
-		public function VolumeEvent( type:String, volume:Number, bubbles:Boolean=false, cancelable:Boolean=false )
+		
+		public function VolumeEvent(type:String, volume:Number, bubbles:Boolean=false, cacelable:Boolean=false)
 		{
-			super(type,bubbles,cancelable);
+			this.volume = volume;
+			super(type, bubbles, cacelable);
 		}
 	}
 }
