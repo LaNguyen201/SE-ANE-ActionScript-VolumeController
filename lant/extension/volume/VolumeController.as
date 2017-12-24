@@ -3,57 +3,63 @@ package lant.extension.volume
 	import flash.events.EventDispatcher;
 	import flash.events.StatusEvent;
 	import flash.external.ExtensionContext;
-	import flash.text.ReturnKeyLabel;
 	
-	import lant.extension.volume.VolumeEvent;
-	
+	import lant.extension.volume.events.VolumeEvent;
+
 	public class VolumeController extends EventDispatcher
 	{
-		private static var instace1:VolumeController;
+		private static var _instance:VolumeController;
 		private var extContext:ExtensionContext;
+		private var _systemVolume:Number = NaN;
 		
-		private var systemVolume1:Number = NaN;
-		
-		public function get systemVolume():Number 
+		//Constructor
+		public function VolumeController(enforcer:SingletonEnforcer)
 		{
-			return systemVolume1;
-		}
-		
-		public function set systemVolume( value:Number ):void 
-		{
-			if ( systemVolume1 == value ) {
-				return;
-			}
-			systemVolume1 = value;
-		}
-		
-		
-		public function VolumeController(singleton:SingletonEnforcer)
-		{
-			super();
-			
-			extContext = ExtensionContext.createExtensionContext("lant.extension.volume", "" );
-			
+			extContext = ExtensionContext.createExtensionContext("lant.extension.volume", "");
 			if ( !extContext ) {
-				throw new Error ( "Volume native extension is not supported on this platform." );
-				
+				throw new Error( "Volume native extension is not supported on this platform." );
 			}
-			extContext.addEventListener( StatusEvent.STATUS, onStatus );
+			extContext.addEventListener(StatusEvent.STATUS, onStatus);
 		}
 		
-		public static function get instance():VolumeController 
+ 		public function get systemVolume():Number
 		{
-			if ( !instace1) {
-				instace1 = new VolumeController(new SingletonEnforcer());
-				instace1.init();
+			return _systemVolume;
+		}
+		
+		public function set systemVolume(value:Number):void
+		{
+			if(_systemVolume == value)
+				return;
+			_systemVolume = value;
+		}
+		
+		public static function get instance():VolumeController {
+			if ( !_instance ) {
+				_instance = new VolumeController( new SingletonEnforcer() );
+				_instance.init();
 			}
 			
-			return instace1;
+			return _instance;
 		}
 		
+		public function dispose():void { 
+			extContext.dispose(); 
+		}
+		private function init():void {
+			extContext.call( "init" );
+		}
+		public function getCurrentVolume():Number{
+			return Number(extContext.call("getCurrentVolume"));
+		}
 		
-		public function setVolume( newVolume:Number ):void 
+		private function onStatus(event:StatusEvent):void
 		{
+			systemVolume = Number(event.level);
+			dispatchEvent(new VolumeEvent(VolumeEvent.VOLUME_CHANGED, systemVolume, false, false));
+			
+		}
+		public function setVolume(newVolume:Number):void {
 			if ( isNaN(newVolume) ) {
 				newVolume = 1;
 			}
@@ -70,27 +76,8 @@ package lant.extension.volume
 			
 			systemVolume = newVolume;
 		}
-		
-		
-		public function dispose():void 
-		{
-			extContext.dispose();
-		}
-		
-		private function init():void {
-			extContext.call( "init" );
-		}
-		
-		private function onStatus( event:StatusEvent ):void {
-			systemVolume = Number(event.level);
-			dispatchEvent( new VolumeEvent( VolumeEvent.VOLUME_CHANGED, systemVolume, false, false ) );
-		}
-		
 	}
 }
-class SingletonEnforcer
-{
+class SingletonEnforcer {
 	
 }
-
-
