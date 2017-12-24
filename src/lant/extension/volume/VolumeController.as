@@ -1,10 +1,10 @@
-package my.extension.volume
+package lant.extension.volume
 {
 	import flash.events.EventDispatcher;
 	import flash.events.StatusEvent;
 	import flash.external.ExtensionContext;
 	
-	import my.extension.volume.events.VolumeEvent;
+	import lant.extension.volume.events.VolumeEvent;
 
 	public class VolumeController extends EventDispatcher
 	{
@@ -15,7 +15,7 @@ package my.extension.volume
 		//Constructor
 		public function VolumeController(enforcer:SingletonEnforcer)
 		{
-			extContext = ExtensionContext.createExtensionContext("my.extension.volume", "");
+			extContext = ExtensionContext.createExtensionContext("lant.extension.volume", "");
 			if ( !extContext ) {
 				throw new Error( "Volume native extension is not supported on this platform." );
 			}
