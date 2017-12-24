@@ -1,4 +1,4 @@
-package my.extension.volume.events
+package lant.extension.volume.events
 {
 	import flash.events.Event;
 
